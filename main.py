@@ -98,6 +98,7 @@ if __name__ == "__main__":
         test_docs[i][0] = blank_doc(test_docs[i][0])
 
     # 토큰화 후 파일로 저장
+    # 아래 두 줄의 코드는 최초 1회만 실행, train_token.txt와 test_token.txt 파일 생성 시 주석 처리할 것
     tokenizer_train(train_docs)
     tokenizer_test(test_docs)
 
@@ -105,7 +106,7 @@ if __name__ == "__main__":
     test_token = load_token("test_token.txt")
     token = sorted(list(set(train_token + test_token)))
 
-    # 아래 코드는 최초 1회만 실행, train_vector.txt와 test_vector.txt 파일 생성 시 주석 처리할 것
+    # 아래 두 줄의 코드는 최초 1회만 실행, train_vector.txt와 test_vector.txt 파일 생성 시 주석 처리할 것
     vectorizer_train(train_docs, token)
     vectorizer_test(test_docs, token)
 
