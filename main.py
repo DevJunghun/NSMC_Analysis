@@ -90,5 +90,5 @@ if __name__ == "__main__":
     test_token = load_token("test_token.txt")
     token = sorted(list(set(train_token + test_token)))
 
-    # vectorizer_train(train_docs, token)
-    # vectorizer_test(test_docs, token)
+    vectorizer_train(train_docs, token)
+    vectorizer_test(test_docs, token)
