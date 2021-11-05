@@ -1,4 +1,4 @@
-# Naver sentiment movie corpus를 활용한 데이터 분석 
+**Naver sentiment movie corpus를 활용한 데이터 분석**
 - - -
 ## 기능
 
