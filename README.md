@@ -17,7 +17,7 @@ Naver sentiment movie corpus(NSMC)를 활용해서 영화 리뷰에 대한 데�
 ## 생성 파일
 
 `ratings_train.txt`의 각 리뷰를 토큰화한 파일 `train_token.txt`와  
-`ratings_test.txt`의 각 리뷰를 토큰화한 파일 `test.token.txt`가 생성됩니다.  
+`ratings_test.txt`의 각 리뷰를 토큰화한 파일 `test_token.txt`가 생성됩니다.  
 `ratings_train.txt`의 각 리뷰를 문서벡터화한 `train_vector.txt`와  
 `ratings_test.txt`의 각 리뷰를 문서벡터화한 `test_vector.txt`가 생성됩니다.  
   
