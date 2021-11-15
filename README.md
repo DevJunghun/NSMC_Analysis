@@ -11,15 +11,15 @@ Naver sentiment movie corpus(NSMC)를 활용해서 영화 리뷰에 대한 데�
 ## 데이터
 
 분석에 필요한 데이터는 해당 [github](https://github.com/e9t/nsmc)에서 받을 수 있습니다.  
-분석에 사용할 데이터는 `ratings.train.txt`와 `ratings.test.txt`로 각각 학습 데이터와 테스트 데이터입니다.
+분석에 사용할 데이터는 `ratings_train.txt`와 `ratings_test.txt`로 각각 학습 데이터와 테스트 데이터입니다.
 - - -
 
 ## 생성 파일
 
-`ratings.train.txt`의 각 리뷰를 토큰화한 파일 `train_token.txt`와  
-`ratings.test.txt`의 각 리뷰를 토큰화한 파일 `test.token.txt`가 생성됩니다.  
-`ratings.train.txt`의 각 리뷰를 문서벡터화한 `train_vector.txt`와  
-`ratings.test.txt`의 각 리뷰를 문서벡터화한 `test_vector.txt`가 생성됩니다.  
+`ratings_train.txt`의 각 리뷰를 토큰화한 파일 `train_token.txt`와  
+`ratings_test.txt`의 각 리뷰를 토큰화한 파일 `test.token.txt`가 생성됩니다.  
+`ratings_train.txt`의 각 리뷰를 문서벡터화한 `train_vector.txt`와  
+`ratings_test.txt`의 각 리뷰를 문서벡터화한 `test_vector.txt`가 생성됩니다.  
   
 **프로그램을 여러 번 실행할 경우 파일을 생성하는 데에 많은 시간이 소요되므로, 최초 실행이 완료되면 코드 내에 `아래 두 줄의 코드는 최초 1회만 실행`이라는 주석 아래의 코드를 주석 처리하면 더 빠르고 효율적인 분석이 가능합니다.**
 - - -
