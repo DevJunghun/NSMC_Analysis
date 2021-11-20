@@ -99,8 +99,8 @@ if __name__ == "__main__":
 
     # 토큰화 후 파일로 저장
     # 아래 두 줄의 코드는 최초 1회만 실행, train_token.txt와 test_token.txt 파일 생성 시 주석 처리할 것
-    tokenizer_train(train_docs)
-    tokenizer_test(test_docs)
+    # tokenizer_train(train_docs)
+    # tokenizer_test(test_docs)
 
     train_token = load_token("train_token.txt")
     test_token = load_token("test_token.txt")
@@ -108,7 +108,7 @@ if __name__ == "__main__":
 
     # 아래 두 줄의 코드는 최초 1회만 실행, train_vector.txt와 test_vector.txt 파일 생성 시 주석 처리할 것
     vectorizer_train(train_docs, token)
-    vectorizer_test(test_docs, token)
+    # vectorizer_test(test_docs, token)
 
     train_vector = load_vector('train_vector.txt')[:50000]
     test_vector = load_vector('test_vector.txt')

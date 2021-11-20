@@ -2,6 +2,12 @@
 # Created by https://www.toptal.com/developers/gitignore/api/windows,python,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,python,visualstudiocode
 
+### NSMC files ###
+ratings_test.txt
+ratings_train.txt
+train_vector.txt
+test_vector.txt
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
