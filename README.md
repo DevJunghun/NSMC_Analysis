@@ -32,7 +32,8 @@ Naver sentiment movie corpus(NSMC)를 활용해서 영화 리뷰에 대한 데�
 - - -
 
 ## 개발 예정
-* `ratings_test.txt`에 대한 긍부정 일치 개수 계산  
+* `ratings_test.txt`에 대한 긍부정 일치 개수 계산   
+* Confusion Matrix를 이용한 긍부정 일치, 불일치 정확도 계산    
 * [SVM](https://www.cs.cornell.edu/people/tj/svm_light/)(Support Vector Machine) 이용하여 분류 및 성능 평가  
 * bigram, sentencePiece 토큰화 기법을 이용하여 문서벡터 재구성, 분류 및 성능 평가
 - - -
