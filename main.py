@@ -119,7 +119,7 @@ if __name__ == "__main__":
     # vectorizer_train(train_docs, token)
 
     train_vector = load_vector('train_vector.txt')[:1000]
-    test_vector = load_vector('test_vector.txt')[:10000]
+    test_vector = load_vector('test_vector.txt')[:1000]
     
     num = int(input("1 ~ 50000 정수를 입력해주세요: "))
     check_vector = test_vector[num - 1]
@@ -142,4 +142,30 @@ if __name__ == "__main__":
     if emotion_list.count('1') > emotion_list.count('-1'):
         print(f"5개 영화평의 긍부정 개수가 많은 값은 1로 {emotion_list.count('1')}개입니다. 영화평이 영화에 대해 긍정적입니다.")
     else:
-        print(f"5개 영화평의 긍부정 개수가 많은 값은 -1으로 {emotion_list.count('0')}개입니다. 영화평이 영화에 대해 부정적입니다.")
+        print(f"5개 영화평의 긍부정 개수가 많은 값은 -1으로 {emotion_list.count('-1')}개입니다. 영화평이 영화에 대해 부정적입니다.")
+
+    TP, FP, FN, TN = 0, 0, 0, 0
+    for i in range(len(test_vector)):
+        all_sim_list, all_emotion_list = list(), list()
+        for j in range(len(train_vector)):
+            if cosine_similarity([test_vector[i]], [train_vector[j]]) > 0.8:
+                all_sim_list.append((j, train_vector[j], cosine_similarity([test_vector[i]], [train_vector[j]])))
+
+        all_sim_list = sorted(all_sim_list, key=lambda x:x[2])[:5]
+        for k in range(len(all_sim_list)):
+            all_emotion_list.append(train_docs[all_sim_list[k][0]][1])
+
+        if (all_emotion_list.count('1') > all_emotion_list.count('-1')) and test_docs[i][1] == '1':
+            TP += 1
+        elif (all_emotion_list.count('1') > all_emotion_list.count('-1')) and test_docs[i][1] == '-1':
+            FP += 1
+        elif (all_emotion_list.count('1') < all_emotion_list.count('-1')) and test_docs[i][1] == '1':
+            FN += 1
+        elif (all_emotion_list.count('1') < all_emotion_list.count('-1')) and test_docs[i][1] == '-1':
+            TN += 1
+    print(TP, FP, FN, TN)
+    print(f"Precision: {TP / (TP + FP)}")
+    print(f"Accuracy: {(TP + TN) / (TP + FP + TN + FN)}")
+
+    print(f"긍정 영화평 중에서 일치 정확도: {TP / (TP + FP)}")
+    print(f"부정 영화평 중에서 일치 정확도: {TN / (TN + FN)}")
