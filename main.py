@@ -53,6 +53,7 @@ def idf(token, docs):
 def vectorizer_train(docs, token):
     with open('train_vector.txt', 'w', encoding='utf-8') as f:
         for i in range(len(docs)):
+            word_list = list()
             if docs[i][-1] == '1':
                 f.write(f"{'1'}")
             else:
@@ -62,12 +63,17 @@ def vectorizer_train(docs, token):
                 tf_value = tf(docs[i][0][j:j+2], docs[i])
                 idf_value = idf(docs[i][0][j:j+2], docs)
                 tfidf = tf_value * idf_value
-                f.write(f" {token.index(docs[i][0][j:j+2]) + 1}:{tfidf:.15f}")
+                word_list.append((token.index(docs[i][0][j:j+2]) + 1, tfidf))
+            word_list = list(set(word_list))
+            word_list.sort(key = lambda x:x[0])
+            for i in word_list:
+                f.write(f" {i[0]}:{i[1]:.15f}")
             f.write("\n")
 
 def vectorizer_test(docs, token):
     with open('test_vector.txt', 'w', encoding='utf-8') as f:
         for i in range(len(docs)):
+            word_list = list()
             tf_value, idf_value = 0, 0
             if docs[i][-1] == '1':
                 f.write(f"{'1'}")
@@ -77,7 +83,11 @@ def vectorizer_test(docs, token):
                 tf_value = tf(docs[i][0][j:j+2], docs[i])
                 idf_value = idf(docs[i][0][j:j+2], docs)
                 tfidf = tf_value * idf_value
-                f.write(f" {token.index(docs[i][0][j:j+2]) + 1}:{tfidf:.15f}")
+                word_list.append((token.index(docs[i][0][j:j+2]) + 1, tfidf))
+            word_list = list(set(word_list))
+            word_list.sort(key = lambda x:x[0])
+            for i in word_list:
+                f.write(f" {i[0]}:{i[1]:.15f}")
             f.write("\n")
 
 def clean_doc(doc):
@@ -118,14 +128,15 @@ if __name__ == "__main__":
     # vectorizer_test(test_docs, token)
     # vectorizer_train(train_docs, token)
 
-    train_vector = load_vector('train_vector.txt')[:1000]
-    test_vector = load_vector('test_vector.txt')[:1000]
+    # 시간이 다수 소요됨으로 인해 데이터의 양을 축소하여 처리
+    train_vector = load_vector('train_vector.txt')[:10000]
+    test_vector = load_vector('test_vector.txt')[:100]
     
     num = int(input("1 ~ 50000 정수를 입력해주세요: "))
     check_vector = test_vector[num - 1]
     sim_list = list()
     for i in range(len(train_vector)):
-        if cosine_similarity([train_vector[i]], [check_vector]) > 0.8:
+        if cosine_similarity([train_vector[i]], [check_vector]) > 0.9999999999:
             sim_list.append((i, train_vector[i], cosine_similarity([train_vector[i]], [check_vector])))
     sim_list = sorted(sim_list, key=lambda x:-x[2])[:5]
     test_review = load_file('.\\ratings_train.txt')[num - 1]
@@ -136,32 +147,33 @@ if __name__ == "__main__":
     print(f"{num}번째 영화평과 가장 유사한 5개의 영화평은 다음과 같습니다.\n")
     for n, i in enumerate(sim_list):
         sim_review = load_file('.\\ratings_test.txt')[i[0] - 1]
-        emotion_list.append(sim_review[1])
+        if sim_review[1] == '1': emotion_list.append('1')
+        else: emotion_list.append('-1')
         print(f"{n + 1} : {' '.join(sim_review[:1])}")
     print()
     if emotion_list.count('1') > emotion_list.count('-1'):
         print(f"5개 영화평의 긍부정 개수가 많은 값은 1로 {emotion_list.count('1')}개입니다. 영화평이 영화에 대해 긍정적입니다.")
     else:
-        print(f"5개 영화평의 긍부정 개수가 많은 값은 -1으로 {emotion_list.count('-1')}개입니다. 영화평이 영화에 대해 부정적입니다.")
+        print(f"5개 영화평의 긍부정 개수가 많은 값은 -1로 {emotion_list.count('-1')}개입니다. 영화평이 영화에 대해 부정적입니다.")
 
     TP, FP, FN, TN = 0, 0, 0, 0
     for i in range(len(test_vector)):
         all_sim_list, all_emotion_list = list(), list()
         for j in range(len(train_vector)):
-            if cosine_similarity([test_vector[i]], [train_vector[j]]) > 0.8:
+            if cosine_similarity([test_vector[i]], [train_vector[j]]) > 0.9999999999:
                 all_sim_list.append((j, train_vector[j], cosine_similarity([test_vector[i]], [train_vector[j]])))
 
         all_sim_list = sorted(all_sim_list, key=lambda x:x[2])[:5]
         for k in range(len(all_sim_list)):
-            all_emotion_list.append(train_docs[all_sim_list[k][0]][1])
-
+            if train_docs[all_sim_list[k][0]][1] == '1': all_emotion_list.append('1')
+            else: all_emotion_list.append('-1')
         if (all_emotion_list.count('1') > all_emotion_list.count('-1')) and test_docs[i][1] == '1':
             TP += 1
-        elif (all_emotion_list.count('1') > all_emotion_list.count('-1')) and test_docs[i][1] == '-1':
+        elif (all_emotion_list.count('1') > all_emotion_list.count('-1')) and test_docs[i][1] == '0':
             FP += 1
         elif (all_emotion_list.count('1') < all_emotion_list.count('-1')) and test_docs[i][1] == '1':
             FN += 1
-        elif (all_emotion_list.count('1') < all_emotion_list.count('-1')) and test_docs[i][1] == '-1':
+        elif (all_emotion_list.count('1') < all_emotion_list.count('-1')) and test_docs[i][1] == '0':
             TN += 1
     print(TP, FP, FN, TN)
     print(f"Precision: {TP / (TP + FP)}")
