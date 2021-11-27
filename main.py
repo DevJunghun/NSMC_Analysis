@@ -14,18 +14,33 @@ def load_token(filename):
         token_list = list(set([token.replace("\n", "") for token in f.readlines()]))
     return token_list
 
+# def load_vector(filename):
+#     with open(filename, 'r', encoding='utf-8') as f:
+#         doc_list = [line.split()[2:] for line in f.read().splitlines()]
+#         vector_list = list()
+#         global token
+#         for i in doc_list:
+#             token_list = [0] * len(token)
+#             for j in i:
+#                 temp = j.split(':')
+#                 token_list[int(temp[0])] = float(temp[1])
+#             vector_list.append(token_list)
+#     return vector_list
+
 def load_vector(filename):
     with open(filename, 'r', encoding='utf-8') as f:
-        doc_list = [line.split()[2:] for line in f.read().splitlines()]
-        vector_list = list()
+        doc_list = [line.split()[1:] for line in f.read().splitlines()]
+        answer_list = list()
         for i in doc_list:
+            vector_list = list()
             for j in i:
                 temp = j.split(':')
                 temp_list = list()
                 temp_list.append(int(temp[0]))
                 temp_list.append(float(temp[1]))
                 vector_list.append(temp_list)
-    return vector_list
+            answer_list.append(vector_list)
+    return answer_list
 
 def tokenizer_train(docs):
     with open('train_token.txt', 'w', encoding='utf-8') as f:
@@ -90,6 +105,22 @@ def vectorizer_test(docs, token):
                 f.write(f" {i[0]}:{i[1]:.15f}")
             f.write("\n")
 
+def vector2matrix(vector1, vector2):
+    token_list = list()
+    for v1 in vector1: token_list.append(v1[0])
+    for v2 in vector2: token_list.append(v2[0])
+    token_list = sorted(list(set(token_list)))
+    vector1_list = [0] * len(token_list)
+    vector2_list = [0] * len(token_list)
+
+    for i in range(len(token_list)):
+        for vv1 in vector1:
+            if vv1[0] == token_list[i]: vector1_list[i] = vv1[1]
+        for vv2 in vector2:
+            if vv2[0] == token_list[i]: vector2_list[i] = vv2[1]
+    
+    return vector1_list, vector2_list
+
 def clean_doc(doc):
     doc = re.sub("[0-9]{2,3}-[0-9]{4}-[0-9]{4}", "", doc) # 전화번호 분리
     doc = re.sub("^[_0-9a-zA-Z]*@[0-9a-zA-Z-]+(\.[0-9a-zA-Z-]+)+", "", doc) # 이메일 분리
@@ -133,20 +164,22 @@ if __name__ == "__main__":
     test_vector = load_vector('test_vector.txt')[:100]
     
     num = int(input("1 ~ 50000 정수를 입력해주세요: "))
-    check_vector = test_vector[num - 1]
     sim_list = list()
+
     for i in range(len(train_vector)):
-        if cosine_similarity([train_vector[i]], [check_vector]) > 0.9999999999:
-            sim_list.append((i, train_vector[i], cosine_similarity([train_vector[i]], [check_vector])))
+        if len(train_vector[i]) == 0 and len(test_vector[num - 1]) == 0: continue
+        vector1, vector2 = vector2matrix(train_vector[i], test_vector[num - 1])
+        if cosine_similarity([vector1], [vector2]) > 0.05:
+            sim_list.append((i, train_vector[i], cosine_similarity([vector1], [vector2])))
     sim_list = sorted(sim_list, key=lambda x:-x[2])[:5]
-    test_review = load_file('.\\ratings_train.txt')[num - 1]
+    test_review = load_file('.\\ratings_test.txt')[num - 1]
     emotion_list = list()
     print()
     print(f"{num}번째 영화평 : {' '.join(test_review[:1])}")
     print()
     print(f"{num}번째 영화평과 가장 유사한 5개의 영화평은 다음과 같습니다.\n")
     for n, i in enumerate(sim_list):
-        sim_review = load_file('.\\ratings_test.txt')[i[0] - 1]
+        sim_review = load_file('.\\ratings_train.txt')[i[0] - 1]
         if sim_review[1] == '1': emotion_list.append('1')
         else: emotion_list.append('-1')
         print(f"{n + 1} : {' '.join(sim_review[:1])}")
@@ -160,8 +193,10 @@ if __name__ == "__main__":
     for i in range(len(test_vector)):
         all_sim_list, all_emotion_list = list(), list()
         for j in range(len(train_vector)):
-            if cosine_similarity([test_vector[i]], [train_vector[j]]) > 0.9999999999:
-                all_sim_list.append((j, train_vector[j], cosine_similarity([test_vector[i]], [train_vector[j]])))
+            if len(test_vector[i]) == 0 and len(train_vector[j]) == 0: continue
+            vector1, vector2 = vector2matrix(test_vector[i], train_vector[j])
+            if cosine_similarity([vector1], [vector2]) > 0.05:
+                all_sim_list.append((j, train_vector[j], cosine_similarity([vector1], [vector2])))
 
         all_sim_list = sorted(all_sim_list, key=lambda x:x[2])[:5]
         for k in range(len(all_sim_list)):
