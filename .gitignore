@@ -10,6 +10,7 @@ test_vector.txt
 LICENSE.txt
 svm_classify.exe
 svm_learn.exe
+wv_naverMovie_KLT2000.py
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

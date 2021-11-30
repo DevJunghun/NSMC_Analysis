@@ -1,7 +1,7 @@
 import re
 import math
 from sklearn.metrics.pairwise import cosine_similarity
-import random
+# from gensim.models import word2vec
 
 def load_file(filename):
     with open(filename, 'r', encoding='utf-8') as f:
@@ -13,19 +13,6 @@ def load_token(filename):
     with open(filename, 'r', encoding='utf-8') as f:
         token_list = list(set([token.replace("\n", "") for token in f.readlines()]))
     return token_list
-
-# def load_vector(filename):
-#     with open(filename, 'r', encoding='utf-8') as f:
-#         doc_list = [line.split()[2:] for line in f.read().splitlines()]
-#         vector_list = list()
-#         global token
-#         for i in doc_list:
-#             token_list = [0] * len(token)
-#             for j in i:
-#                 temp = j.split(':')
-#                 token_list[int(temp[0])] = float(temp[1])
-#             vector_list.append(token_list)
-#     return vector_list
 
 def load_vector(filename):
     with open(filename, 'r', encoding='utf-8') as f:
@@ -55,6 +42,28 @@ def tokenizer_test(docs):
             for j in range(len(docs[i][0]) - 1):
                 f.write(docs[i][0][j:j+2])
                 f.write('\n')
+
+# def tokenizer_train1(docs):
+#     with open('train_token1.txt', 'w', encoding='utf-8') as f:
+#         for i in range(len(docs)):
+#             for j in range(len(docs[i][0]) - 1):
+#                 if j != len(docs[i][0]) - 2:
+#                     f.write(docs[i][0][j:j+2])
+#                     f.write(" ")
+#                 else:
+#                     f.write(docs[i][0][j:j+2])
+#             f.write('\n')
+
+# def tokenizer_test1(docs):
+#     with open('test_token1.txt', 'w', encoding='utf-8') as f:
+#         for i in range(len(docs)):
+#             for j in range(len(docs[i][0]) - 1):
+#                 if j != len(docs[i][0]) - 2:
+#                     f.write(docs[i][0][j:j+2])
+#                     f.write(" ")
+#                 else:
+#                     f.write(docs[i][0][j:j+2])
+#             f.write('\n')
 
 def tf(token, doc):
     return doc[0].count(token)
@@ -160,8 +169,8 @@ if __name__ == "__main__":
     # vectorizer_train(train_docs, token)
 
     # 시간이 다수 소요됨으로 인해 데이터의 양을 축소하여 처리
-    train_vector = load_vector('train_vector.txt')[:10000]
-    test_vector = load_vector('test_vector.txt')[:100]
+    train_vector = load_vector('train_vector.txt')[:10]
+    test_vector = load_vector('test_vector.txt')[:10]
     
     num = int(input("1 ~ 50000 정수를 입력해주세요: "))
     sim_list = list()
