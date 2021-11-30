@@ -6,6 +6,7 @@ Naver sentiment movie corpus(NSMC)를 활용해서 영화 리뷰에 대한 데�
 * 데이터 전처리(한글 제외 문자 분리, 리뷰 토큰화, 문서 벡터 생성)
 * 토큰 빈도 분석, 리뷰 유사도 분석, 리뷰어 감정 분석
 * 유사한 리뷰 추출, 동일한 감정 분석 결과 추출
+* 긍부정 일치, 불일치 정확도 계산  
 - - -
 
 ## 데이터
@@ -29,11 +30,11 @@ Naver sentiment movie corpus(NSMC)를 활용해서 영화 리뷰에 대한 데�
 * 데이터 전처리(한글 제외 문자 분리, 리뷰 토큰화, 문서 벡터 생성)
 * 토큰 빈도 분석, 리뷰 유사도 분석, 리뷰어 감정 분석
 * 유사한 리뷰 추출, 동일한 감정 분석 결과 추출
+* `ratings_test.txt`에 대한 긍부정 일치 개수 계산   
+* Confusion Matrix를 이용한 긍부정 일치, 불일치 정확도 계산   
 - - -
 
-## 개발 예정
-* `ratings_test.txt`에 대한 긍부정 일치 개수 계산   
-* Confusion Matrix를 이용한 긍부정 일치, 불일치 정확도 계산    
+## 개발 예정 
 * [SVM](https://www.cs.cornell.edu/people/tj/svm_light/)(Support Vector Machine) 이용하여 분류 및 성능 평가  
 * bigram, sentencePiece 토큰화 기법을 이용하여 문서벡터 재구성, 분류 및 성능 평가
 - - -
