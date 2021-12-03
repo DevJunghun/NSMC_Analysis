@@ -169,8 +169,8 @@ if __name__ == "__main__":
     # vectorizer_train(train_docs, token)
 
     # 시간이 다수 소요됨으로 인해 데이터의 양을 축소하여 처리
-    train_vector = load_vector('train_vector.txt')[:10]
-    test_vector = load_vector('test_vector.txt')[:10]
+    train_vector = load_vector('train_vector.txt')[:1000]
+    test_vector = load_vector('test_vector.txt')
     
     num = int(input("1 ~ 50000 정수를 입력해주세요: "))
     sim_list = list()

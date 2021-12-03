@@ -11,6 +11,8 @@ LICENSE.txt
 svm_classify.exe
 svm_learn.exe
 wv_naverMovie_KLT2000.py
+model
+svm_predictions
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
